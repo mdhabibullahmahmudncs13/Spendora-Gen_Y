@@ -11,11 +11,13 @@ type User = {
 type AuthContextType = {
   user: User;
   isLoading: boolean;
+  login: (email: string, password: string) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isLoading: true,
+  login: () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -23,36 +25,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Mock authentication check
-    // In a real app, this would check for an auth token and fetch user data
     const checkAuth = () => {
-      // Check if we're on a protected route (dashboard)
-      const isProtectedRoute = window.location.pathname.includes('/dashboard') ||
-                              window.location.pathname.includes('/expenses') ||
-                              window.location.pathname.includes('/reports') ||
-                              window.location.pathname.includes('/advisor') ||
-                              window.location.pathname.includes('/settings');
-      
-      if (isProtectedRoute && !localStorage.getItem('mock_auth')) {
-        // Redirect to login
-        window.location.href = '/login';
-      } else if (localStorage.getItem('mock_auth')) {
-        // Set user from mock data
-        setUser({
-          id: '1',
-          name: 'John Doe',
-          email: 'john.doe@example.com',
-        });
+      const mockAuth = localStorage.getItem('mock_auth');
+      if (mockAuth) {
+        try {
+          const userData = JSON.parse(mockAuth);
+          setUser(userData);
+        } catch (e) {
+          localStorage.removeItem('mock_auth');
+        }
       }
-      
       setIsLoading(false);
     };
 
     checkAuth();
   }, []);
 
+  const login = (email: string, password: string) => {
+    // Mock login - in a real app this would validate credentials
+    const userData = {
+      id: '1',
+      name: 'John Doe',
+      email: email,
+    };
+    localStorage.setItem('mock_auth', JSON.stringify(userData));
+    setUser(userData);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider value={{ user, isLoading, login }}>
       {children}
     </AuthContext.Provider>
   );
