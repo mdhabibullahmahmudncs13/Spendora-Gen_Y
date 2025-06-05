@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { CurrencySelector } from '@/components/currency-selector';
 import { useAuth } from '@/components/auth-provider';
 import {
   DropdownMenu,
@@ -79,12 +80,13 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-4">
+          <CurrencySelector />
           <ThemeToggle />
           
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost\" size="icon\" className="rounded-full">
+                <Button variant="ghost" size="icon" className="rounded-full">
                   <User className="h-5 w-5" />
                 </Button>
               </DropdownMenuTrigger>

@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/components/auth-provider';
+import { CurrencyProvider } from '@/components/currency-provider';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 
@@ -29,12 +30,14 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster />
+            <CurrencyProvider>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+              <Toaster />
+            </CurrencyProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
